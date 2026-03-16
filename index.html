@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>주간 체크리스트</title>
+<style>
+body {
+  background-color: #add8e6;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  padding: 20px;
+}
+.task-row {
+  margin: 10px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  background-color: #f0f8ff;
+  border-radius: 10px;
+  padding: 10px 20px;
+  width: 200px;
+  box-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+  transition: transform 0.2s;
+}
+.task-row:hover {
+  transform: scale(1.05);
+}
+.task-row.done {
+  background-color: #c8f0c8;
+  text-decoration: line-through;
+  opacity: 0.7;
+}
+.checkbox {
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  accent-color: #4CAF50;
+  transform: scale(1.2);
+}
+.task-label {
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+}
+</style>
+</head>
+<body>
+<h2>이번 주 체크리스트</h2>
+<div id="tasks"></div>
+<script>
+const names = ["권현우","민서현","신지원","정우준","조휘진","천우진"];
+const tasks = names.map(name => ({ name, checked: false }));
+
+function toggle(i) {
+  tasks[i].checked = !tasks[i].checked;
+  renderTasks();
+}
+
+function renderTasks() {
+  const container = document.getElementById("tasks");
+  container.innerHTML = "";
+
+  const day = new Date().getDay(); // 0:일, 6:토
+  if (day === 6) {
+    const div = document.createElement("div");
+    div.className = "task-row";
+    div.textContent = "오늘은 없습니다";
+    container.appendChild(div);
+    return;
+  }
+
+  tasks.forEach((t, i) => {
+    const div = document.createElement("div");
+    div.className = "task-row" + (t.checked ? " done" : "");
+
+    const label = document.createElement("span");
+    label.className = "task-label";
+    label.textContent = t.name;
+    label.onclick = () => toggle(i);
+
+    const cb = document.createElement("input");
+    cb.type = "checkbox";
+    cb.className = "checkbox";
+    cb.checked = t.checked;
+    cb.onclick = () => toggle(i);
+
+    div.appendChild(label);
+    div.appendChild(cb);
+    container.appendChild(div);
+  });
+}
+
+renderTasks();
+</script>
+</body>
+</html>
